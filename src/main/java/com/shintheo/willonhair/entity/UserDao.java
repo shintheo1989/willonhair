@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -15,12 +17,14 @@ import com.shintheo.willonhair.base.Status;
 import com.shintheo.willonhair.base.Type;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -30,7 +34,8 @@ public class UserDao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "c_id", updatable = false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "c_id", updatable = false, nullable = false)
 	private Long id;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "c_status", nullable = false, length = 20)
