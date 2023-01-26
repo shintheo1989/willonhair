@@ -1,7 +1,9 @@
 package com.shintheo.willonhair.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.shintheo.willonhair.base.Gender;
 import com.shintheo.willonhair.base.Status;
@@ -29,7 +35,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "t_user")
-public class UserDao implements Serializable {
+public class UserDao implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -78,5 +84,30 @@ public class UserDao implements Serializable {
 	private String translations;
 	@Column(name = "c_timeZone")
 	private String timeZone;
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(type.name())); 
+	}
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return true; // TODO("Do we need to handle expiration of accounts")
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return List.of(Status.APPROVED, Status.VISIBLE).contains(this.status);
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true; // TODO("Handle expiration of credentials if needed")
+	}
+	@Override
+	public boolean isEnabled() {
+		return List.of(Status.APPROVED, Status.VISIBLE).contains(this.status);
+	}
 
 }
