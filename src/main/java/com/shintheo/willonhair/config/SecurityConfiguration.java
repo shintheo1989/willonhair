@@ -29,6 +29,8 @@ public class SecurityConfiguration {
 		.authorizeHttpRequests()
 		.mvcMatchers(HttpMethod.POST, "/api/v1/auth/**")
 		.permitAll()
+		.mvcMatchers(HttpMethod.GET, "/swagger-ui/**", "api-docs/**")
+		.permitAll()
 		.anyRequest()
 		.authenticated()
 		.and()
