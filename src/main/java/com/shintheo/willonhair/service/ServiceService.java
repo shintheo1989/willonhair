@@ -12,6 +12,8 @@ public interface ServiceService {
 	// Read operation
 	List<ServiceDao> fetchServiceList();
 	
+	List<ServiceDao> fetchCategoryServices(Long catId);
+	
 	Optional<ServiceDao> findById(Long serviceId);
 	
 	// Update operation

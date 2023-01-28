@@ -11,10 +11,10 @@ public interface CategoryService {
 	// Save operation
 	CategoryDao saveCategory(CategoryDao category);
 	
-	// Read operation
-	List<CategoryDao> getServiceCategories(Long serviceId);
-	
 	Optional<CategoryDao> findById(Long categoryId);
+	
+	// Read operation
+	List<CategoryDao> fetchAll();
 	
 	// Update operation
 	CategoryDao updateCategory(CategoryDao category, Long cateogryId);

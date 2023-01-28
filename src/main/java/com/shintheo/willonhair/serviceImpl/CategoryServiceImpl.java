@@ -1,15 +1,14 @@
 package com.shintheo.willonhair.serviceImpl;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
-import com.shintheo.willonhair.entity.ServiceDao;
 import com.shintheo.willonhair.entity.CategoryDao;
-import com.shintheo.willonhair.repository.ServiceRepository;
 import com.shintheo.willonhair.repository.CategoryRepository;
 import com.shintheo.willonhair.service.CategoryService;
 
@@ -21,8 +20,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryRepository catRepo;
-	@Autowired
-	private ServiceRepository serviceRepo;
 
 	@Override
 	public CategoryDao submitCategorie(CategoryDao categorie) {
@@ -38,9 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
 			
 		// Read operation
 		@Override
-		public List<CategoryDao> getServiceCategories(Long serviceId){
-			ServiceDao service = serviceRepo.findById(serviceId).get();
-			return new ArrayList<CategoryDao>(service.getCategories());
+		public List<CategoryDao> fetchAll(){
+			return catRepo.findAll();
 		}
 		
 		@Override
@@ -51,11 +47,14 @@ public class CategoryServiceImpl implements CategoryService {
 		// Update operation
 		@Override
 		public CategoryDao updateCategory(CategoryDao category, Long catId) {
-			CategoryDao dbCat = catRepo.findById(catId).get();
-			dbCat.setName(category.getName());
-			dbCat.setImageName(category.getImageName());
-			dbCat.setNote(category.getNote());
-			return catRepo.save(dbCat);
+			// Find if category exists
+			Optional<CategoryDao> opDbCat = catRepo.findById(catId);
+			if(opDbCat.isPresent()) {
+				category.setId(catId);
+				return catRepo.save(category);				
+			} else {
+				throw new NotFoundException("Category not found");
+			}
 		}
 			
 		// Delete operation

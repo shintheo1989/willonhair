@@ -1,11 +1,9 @@
 package com.shintheo.willonhair.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.shintheo.willonhair.entity.CategoryDao;
 
-@Repository
-public interface CategoryRepository extends CrudRepository<CategoryDao, Long> {
+public interface CategoryRepository extends JpaRepository<CategoryDao, Long> {
 
 }
