@@ -1,11 +1,12 @@
 package com.shintheo.willonhair.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.shintheo.willonhair.entity.AppointmentDao;
+import com.shintheo.willonhair.entity.UserDao;
 
-@Repository
-public interface AppointmentRepository  extends CrudRepository<AppointmentDao, Long> {
-
+public interface AppointmentRepository  extends JpaRepository<AppointmentDao, Long> {
+	List<AppointmentDao> findByEmployee(UserDao employee);
 }
