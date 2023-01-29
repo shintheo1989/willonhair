@@ -91,6 +91,7 @@ public class ServiceController implements ServiceApi {
 			String newImageName = storageService.storeImage(file);
 			service.setPictureFullPath(newImageName);
 		}
+		service.setCategory(catService.findById(categoryId).orElseThrow());
 		return ResponseEntity.ok(serviceService.updateService(service, serviceId));
 	}
 }

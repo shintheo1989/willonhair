@@ -49,13 +49,8 @@ public class ServiceServiceImpl implements ServiceService {
 	// Update operation
 	@Override
 	public ServiceDao updateService(ServiceDao service, Long serviceId) {
-		ServiceDao dbService = serviceRepository.findById(serviceId).get();
-		dbService.setName(service.getName());
-		dbService.setPictureFullPath(service.getPictureFullPath());
-		dbService.setPrice(service.getPrice());
-		dbService.setRangeStart(service.getRangeStart());
-		dbService.setRangeEnd(service.getRangeEnd());
-		return serviceRepository.save(dbService);
+		service.setId(serviceId);
+		return serviceRepository.save(service);
 	}
 		
 	// Delete operation
