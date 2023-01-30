@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shintheo.willonhair.api.AppointmentApi;
 import com.shintheo.willonhair.entity.AppointmentDao;
-import com.shintheo.willonhair.entity.UserDao;
+import com.shintheo.willonhair.entity.AppointmentTransferDao;
 import com.shintheo.willonhair.entity.UserDao;
 import com.shintheo.willonhair.service.AppointmentService;
+import com.shintheo.willonhair.service.AppointmentTransferService;
 import com.shintheo.willonhair.service.ClientService;
 import com.shintheo.willonhair.service.EmployeeService;
 
@@ -33,19 +34,22 @@ import lombok.extern.slf4j.Slf4j;
 public class AppointmentController implements AppointmentApi {
 
 	@Autowired
-	private final AppointmentService appointmentService;
+	private AppointmentService appointmentService;
 	
 	@Autowired
-	ClientService clientService;
+	private AppointmentTransferService transfertService;
+	
+	@Autowired
+	private ClientService clientService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 
 	@Override
 	public ResponseEntity<AppointmentDao> submitAppointment(@Valid AppointmentDao appointment) {
 		log.info("======>RestController: submit({})<======", appointment);
 		return ResponseEntity.ok(appointmentService.submitAppointment(appointment));
 	}
-	
-	@Autowired
-	EmployeeService employeeService;
 	
 	@Override
 	public List<AppointmentDao> all() {
@@ -153,6 +157,27 @@ public class AppointmentController implements AppointmentApi {
 		// Pay Appointment;
 		Appointment.markAsPaid();
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(appointmentService.saveAppointment(Appointment));
+	}
+	
+	@Override
+	public ResponseEntity<List<AppointmentTransferDao>> listAppointmentTransfers(
+			@PathVariable("id") Long appointmentId) throws NotFoundException {
+		AppointmentDao appointment = appointmentService.findById(appointmentId).orElseThrow();
+		return ResponseEntity.ok(transfertService.findAppointmentTransfers(appointment));
+	}
+	
+
+	@Override
+	public ResponseEntity<AppointmentTransferDao> transfertAppointment(
+			@PathVariable("id") Long appointmentId,
+			@RequestParam(required = true) Long toEmployeeId) throws NotFoundException {
+		
+		UserDao toEmployee =  employeeService.findEmployeeById(toEmployeeId).orElseThrow();
+		AppointmentDao appointment = appointmentService.findById(appointmentId).orElseThrow();
+		
+		AppointmentTransferDao transfer = transfertService.proceedTransfer(appointment, toEmployee);
+		
+		return ResponseEntity.ok(transfer);
 	}
 
 }

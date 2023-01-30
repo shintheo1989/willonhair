@@ -141,7 +141,7 @@ public class AppointmentDao implements Serializable {
 	@JsonManagedReference
 	private AppointmentTransferDao reservationTransfer;
 
-	@OneToMany(mappedBy = "appointment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "appointment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@JsonManagedReference
 	private List<CustomerBookingDao> bookinks;
 	

@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.shintheo.willonhair.entity.AppointmentDao;
+import com.shintheo.willonhair.entity.AppointmentTransferDao;
+
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "AppointmentDao")
@@ -58,4 +61,16 @@ public interface AppointmentApi {
 	
 	@PutMapping(path = "/appointments/{id}/pay")
 	public ResponseEntity<AppointmentDao> payAppointment(@PathVariable("id") Long appointmentId) throws NotFoundException;
+	
+	@GetMapping(path = "/appointments/{id}/transfers")
+	@Operation(summary = "List transfers on appointment", description = "List Transferts made on a given")
+	public ResponseEntity<List<AppointmentTransferDao>> listAppointmentTransfers(
+			@PathVariable("id") Long appointmentId) throws NotFoundException;
+	
+	@PostMapping(path = "/appointments/{id}/transfers")
+	@Operation(summary = "Transfer appointment", description = "Transfert an appointment from an employee to another")
+	public ResponseEntity<AppointmentTransferDao> transfertAppointment(
+			@PathVariable("id") Long appointmentId,
+			@RequestParam(required = true) Long toEmployeeId
+			) throws NotFoundException;
 }
