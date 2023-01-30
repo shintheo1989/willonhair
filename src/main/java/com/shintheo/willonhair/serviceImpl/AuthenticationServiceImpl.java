@@ -5,7 +5,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.shintheo.willonhair.base.Gender;
 import com.shintheo.willonhair.base.Status;
 import com.shintheo.willonhair.base.Type;
 import com.shintheo.willonhair.entity.UserDao;
@@ -36,17 +35,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 				.firstName(request.getFirstname())
 				.lastName(request.getLastname())
 				.email(request.getEmail())
-				.gender(Gender.valueOf(request.getGender()))
+				.gender(request.getGender())
 				.password(passwordEncoder.encode(request.getPassword()))
 				.phone(request.getPhone())
 				.type(type)
 				.status(status)
 				.build();
-		userRepo.save(user);
+		var saveUser = userRepo.save(user);
 		
 		var jwtToken = jwtService.generateToken(user);
 		return AuthenticationResponse.builder()
 				.token(jwtToken)
+				.user(saveUser)
 				.build();
 	}
 	
@@ -64,6 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		var jwtToken = jwtService.generateToken(user);
 		return AuthenticationResponse.builder()
 				.token(jwtToken)
+				.user(user)
 				.build();
 	}
 }

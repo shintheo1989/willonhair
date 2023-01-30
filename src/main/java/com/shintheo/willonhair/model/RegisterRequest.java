@@ -1,5 +1,7 @@
 package com.shintheo.willonhair.model;
 
+import com.shintheo.willonhair.base.Gender;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +17,6 @@ public class RegisterRequest {
 	private String lastname;
 	private String email;
 	private String password;
-	private String gender;
+	private Gender gender;
 	private String phone;
 }

@@ -1,5 +1,7 @@
 package com.shintheo.willonhair.model;
 
+import com.shintheo.willonhair.entity.UserDao;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,4 +14,5 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
 
 	private String token;
+	private UserDao user;
 }
