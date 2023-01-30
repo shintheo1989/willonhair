@@ -1,8 +1,9 @@
 package com.shintheo.willonhair.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,37 +23,28 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "days_off")
+@Table(name = "t_days_off")
 @Builder
 public class DaysOffDao {
 	@Id
-	@Column(name = "id")
+	@Column(name = "c_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "employee_id")
+	@JoinColumn(name = "c_user_id", nullable = false)
 	@JsonBackReference
-	private EmployeeDao employee;
+	private UserDao user;
 	
-	@Column(name = "name", nullable = true)
+	@Column(name = "c_name", nullable = false, length = 255)
 	private String name;
 	
-	@Column(name = "period_start_year")
-	private int startYear;
+	@Column(name = "c_start_date", nullable = false)
+	private Timestamp startDate;
 	
-	@Column(name = "period_start_month")
-	private int startMonth;
+	@Column(name = "c_end_date", nullable = false)
+	private Timestamp endDate;
 	
-	@Column(name = "period_start_day")
-	private int startDay;
-	
-	@Column(name = "period_end_year")
-	private int endYear;
-	
-	@Column(name = "period_end_month")
-	private int endMonth;
-	
-	@Column(name = "period_end_day")
-	private int endDay;
+	@Column(name = "c_repeat", nullable = false, length = 1)
+	private int repeat;
 }

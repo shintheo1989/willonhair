@@ -5,23 +5,22 @@ import java.util.Optional;
 
 import com.shintheo.willonhair.entity.WorkHoursDao;
 import com.shintheo.willonhair.entity.DaysOffDao;
-import com.shintheo.willonhair.entity.EmployeeDao;
 import com.shintheo.willonhair.entity.UserDao;
 
 public interface EmployeeService {
 	// Employees 
-	Optional<EmployeeDao> findEmployeeById(Long employeeId);
+	Optional<UserDao> findEmployeeById(Long employeeId);
 
-	List<EmployeeDao> fetchAll();
+	List<UserDao> fetchAll();
 
-	EmployeeDao createEmployee(EmployeeDao employee);
+	UserDao createEmployee(UserDao employee);
 	
-	EmployeeDao updateEmployee(EmployeeDao employee, Long employeeId);
+	UserDao updateEmployee(UserDao employee, Long employeeId);
 	
 	void deleteEmployee(Long employeeId);
 	
 	// Work hours
-	List<WorkHoursDao> getEmployeeWorkHours(EmployeeDao employee);
+	List<WorkHoursDao> getEmployeeWorkHours(UserDao employee);
 	
 	WorkHoursDao createWorkHours(WorkHoursDao workHours);
 	
@@ -30,7 +29,7 @@ public interface EmployeeService {
 	void deleteWorkHours(Long whId);
 	
 	// Days off
-	List<DaysOffDao> getEmployeeDaysOff(EmployeeDao employee);
+	List<DaysOffDao> getEmployeeDaysOff(UserDao employee);
 	
 	DaysOffDao createDaysOff(DaysOffDao dayOff);
 	

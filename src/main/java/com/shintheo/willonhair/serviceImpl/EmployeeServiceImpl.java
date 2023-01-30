@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shintheo.willonhair.entity.WorkHoursDao;
+import com.shintheo.willonhair.base.Type;
 import com.shintheo.willonhair.entity.DaysOffDao;
-import com.shintheo.willonhair.entity.EmployeeDao;
 import com.shintheo.willonhair.entity.UserDao;
 import com.shintheo.willonhair.repository.WorkHoursRepository;
 import com.shintheo.willonhair.service.EmployeeService;
@@ -30,17 +30,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	private UserRepository userRepo;
 	
-	public List<WorkHoursDao> getEmployeeWorkHours(EmployeeDao employee) {
+	public List<WorkHoursDao> getEmployeeWorkHours(UserDao employee) {
 		return workHoursRepo.findEmployeeWorkHours(employee);
 	}
 
 	@Override
-	public EmployeeDao createEmployee(EmployeeDao employee) {
+	public UserDao createEmployee(UserDao employee) {
 		return employeeRepo.save(employee);
 	}
 
 	@Override
-	public EmployeeDao updateEmployee(EmployeeDao employee, Long employeeId) {
+	public UserDao updateEmployee(UserDao employee, Long employeeId) {
 		employee.setId(employeeId);
 		return employeeRepo.save(employee);
 	}
@@ -51,11 +51,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 	
 	@Override
-	public List<DaysOffDao> getEmployeeDaysOff(EmployeeDao employee) {
+	public List<DaysOffDao> getEmployeeDaysOff(UserDao employee) {
 		return daysOffRepo.findEmployeeDaysOffDao(employee);
 	}
 	
-	public Optional<EmployeeDao> findEmployeeById(Long employeeId) {
+	public Optional<UserDao> findEmployeeById(Long employeeId) {
 		return employeeRepo.findById(employeeId);
 	}
 
@@ -65,8 +65,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 	
 	@Override
-	public List<EmployeeDao> fetchAll() {
-		return employeeRepo.findAll();
+	public List<UserDao> fetchAll() {
+		return employeeRepo.findAll(Type.HAIRDRESSER);
 	}
 	
 	@Override
@@ -95,18 +95,12 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 	
 	@Override
-	public DaysOffDao updateDaysOff(DaysOffDao dayOff, Long whId) {
-		DaysOffDao dbDO = daysOffRepo.findById(whId).get();
-		dbDO.setName(dayOff.getName());
-		dbDO.setStartYear(dayOff.getStartYear());
-		dbDO.setStartMonth(dayOff.getStartMonth());
-		dbDO.setStartDay(dayOff.getStartDay());
-		
-		dbDO.setEndYear(dayOff.getEndYear());
-		dbDO.setEndMonth(dayOff.getEndMonth());
-		dbDO.setEndDay(dayOff.getEndDay());
-		
-		return daysOffRepo.save(dbDO);
+	public DaysOffDao updateDaysOff(DaysOffDao dayOff, Long doId) {
+		// Keep the same user and the same id
+		DaysOffDao dbDayOff = daysOffRepo.findById(doId).orElseThrow();
+		dayOff.setUser(dbDayOff.getUser());
+		dayOff.setId(doId);
+		return daysOffRepo.save(dayOff);
 	}
 	
 	@Override
