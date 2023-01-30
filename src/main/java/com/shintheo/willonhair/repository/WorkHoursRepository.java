@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.shintheo.willonhair.entity.WorkHoursDao;
-import com.shintheo.willonhair.entity.EmployeeDao;
+import com.shintheo.willonhair.entity.UserDao;
 
 public interface WorkHoursRepository extends JpaRepository<WorkHoursDao, Long> {
-	@Query("SELECT u FROM WorkHoursDao u WHERE u.employee = :employee")
-	List<WorkHoursDao> findEmployeeWorkHours(@Param("employee") EmployeeDao employee);
+	@Query("SELECT u FROM WorkHoursDao u WHERE u.user = :employee")
+	List<WorkHoursDao> findEmployeeWorkHours(@Param("employee") UserDao employee);
 }

@@ -13,8 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.shintheo.willonhair.base.Day;
 
 import lombok.AllArgsConstructor;
@@ -35,9 +33,9 @@ public class WorkHoursDao {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "employee_id")
+	@JoinColumn(name = "user_id")
 	@JsonBackReference
-	private EmployeeDao employee;
+	private UserDao user;
 	
 	@Column(name = "name", nullable = true)
 	private String name;
