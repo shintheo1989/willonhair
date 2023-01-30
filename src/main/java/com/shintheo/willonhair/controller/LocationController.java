@@ -1,5 +1,6 @@
 package com.shintheo.willonhair.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -10,13 +11,16 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.shintheo.willonhair.api.LocationApi;
 import com.shintheo.willonhair.entity.LocationDao;
+import com.shintheo.willonhair.entity.UserDao;
 import com.shintheo.willonhair.service.LocationService;
+import com.shintheo.willonhair.service.UserService;
 import com.shintheo.willonhair.service.storage.StorageService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,9 @@ public class LocationController implements LocationApi {
 	
 	@Autowired
 	private final StorageService storageService;
+	
+	@Autowired
+	private final UserService userService;
 
 	@Override
 	public ResponseEntity<LocationDao> createLocations(
@@ -77,6 +84,32 @@ public class LocationController implements LocationApi {
 			location.setPictureFullPath(newImageName);
 		}
 		return ResponseEntity.ok(service.updateLocation(location, catId));
+	}
+	
+	
+	public ResponseEntity<List<LocationDao>> userLocations(
+			@PathVariable(name = "id") Long userId) {
+		UserDao user = userService.getUserById(userId);
+		return ResponseEntity.ok(user.getLocations());
+	}
+	
+	@Override
+	public ResponseEntity<List<LocationDao>> linkUserToLocations(
+			@PathVariable(name = "id") Long userId,
+			@RequestParam(required = true) Long[] locationIds) {
+		UserDao user = userService.getUserById(userId);
+		List<LocationDao> locations = new ArrayList<>();
+		for(Long id: locationIds) {
+			try {				
+				LocationDao location = service.findById(id).orElseThrow();
+				locations.add(location);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		}
+		user.setLocations(locations);
+		userService.updateUser(user);
+		return ResponseEntity.ok(user.getLocations());
 	}
 
 }

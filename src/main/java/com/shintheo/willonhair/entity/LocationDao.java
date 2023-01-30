@@ -1,6 +1,7 @@
 package com.shintheo.willonhair.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.shintheo.willonhair.base.Status;
 
 import lombok.AllArgsConstructor;
@@ -68,5 +74,9 @@ public class LocationDao implements Serializable {
 	
 	@Column(name = "c_translations", nullable = true, length = 767)
 	private String translations;
+	
+	@ManyToMany(mappedBy = "locations")
+	@JsonBackReference
+	private List<UserDao> users;
 
 }

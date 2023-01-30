@@ -5,19 +5,27 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.shintheo.willonhair.base.Gender;
 import com.shintheo.willonhair.base.Status;
 import com.shintheo.willonhair.base.Type;
@@ -72,6 +80,8 @@ public class UserDao implements Serializable, UserDetails {
 	private String pictureFullPath;
 	@Column(name = "c_pictureThumbPath", length = 767)
 	private String pictureThumbPath;
+	
+	@JsonIgnore
 	@Column(name = "c_password", length = 128)
 	private String password;
 	@Column(name = "c_usedTokens")
@@ -84,6 +94,23 @@ public class UserDao implements Serializable, UserDetails {
 	private String translations;
 	@Column(name = "c_timeZone")
 	private String timeZone;
+	
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<WorkHoursDao> workHours;
+	
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<DaysOffDao> daysOffs;
+	
+	@ManyToMany
+	@JoinTable(
+		name = "t_users_locations",
+		joinColumns = @JoinColumn (name = "c_user_id"),
+		inverseJoinColumns = @JoinColumn (name = "c_location_id")
+	)
+	@JsonManagedReference
+	private List<LocationDao> locations;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
