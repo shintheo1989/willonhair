@@ -4,21 +4,29 @@ import java.util.List;
 import java.util.Optional;
 
 import com.shintheo.willonhair.entity.ServiceDao;
+import com.shintheo.willonhair.entity.ServiceProviderDao;
 
 public interface ServiceService {
-	// Save operation
+	
 	ServiceDao saveService(ServiceDao service);
 	
-	// Read operation
 	List<ServiceDao> fetchServiceList();
 	
 	List<ServiceDao> fetchCategoryServices(Long catId);
 	
 	Optional<ServiceDao> findById(Long serviceId);
 	
-	// Update operation
 	ServiceDao updateService(ServiceDao service, Long serviceId);
 	
-	// Delete operation
 	void deleteServiceById(Long serviceId);
+
+	ServiceProviderDao createServiceProvider(ServiceProviderDao provider);
+	
+	ServiceProviderDao updateServiceProvider(ServiceProviderDao provider);
+
+	List<ServiceProviderDao> fetchServiceProviders(Long serviceId);
+	
+	ServiceProviderDao findServiceProviderById(Long serviceProviderId);
+		
+	void deleteServiceProvider(Long serviceProviderId);
 }

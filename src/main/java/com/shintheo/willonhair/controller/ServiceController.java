@@ -3,10 +3,12 @@ package com.shintheo.willonhair.controller;
 import java.util.List;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,8 +19,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.shintheo.willonhair.api.ServiceApi;
 import com.shintheo.willonhair.entity.CategoryDao;
 import com.shintheo.willonhair.entity.ServiceDao;
+import com.shintheo.willonhair.entity.ServiceProviderDao;
+import com.shintheo.willonhair.entity.UserDao;
 import com.shintheo.willonhair.service.CategoryService;
 import com.shintheo.willonhair.service.ServiceService;
+import com.shintheo.willonhair.service.UserService;
 import com.shintheo.willonhair.service.storage.StorageService;
 
 @RestController
@@ -33,6 +38,9 @@ public class ServiceController implements ServiceApi {
 	
 	@Autowired
 	private CategoryService catService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Override
 	public ResponseEntity<ServiceDao> one(Long categoryId, Long serviceId) throws NotFoundException {
@@ -93,5 +101,38 @@ public class ServiceController implements ServiceApi {
 		}
 		service.setCategory(catService.findById(categoryId).orElseThrow());
 		return ResponseEntity.ok(serviceService.updateService(service, serviceId));
+	}
+	
+	public ResponseEntity<List<ServiceProviderDao>> getServiceProviders(@PathVariable("id") Long serviceId) {
+		return ResponseEntity.ok(serviceService.fetchServiceProviders(serviceId));
+	}
+	
+	public ResponseEntity<ServiceProviderDao> addServiceProviders(
+			@PathVariable("id") Long serviceId,
+			@RequestParam(name = "userId", required = true) Long userId,
+			@ModelAttribute ServiceProviderDao serviceProvider) {
+		UserDao user = userService.getUserById(userId);
+		ServiceDao service = serviceService.findById(serviceId).orElseThrow();
+		serviceProvider.setUser(user);
+		serviceProvider.setService(service);
+		return ResponseEntity.ok(serviceService.createServiceProvider(serviceProvider));
+	}
+	
+	public ResponseEntity<ServiceProviderDao> updateServiceProviders(
+			@PathVariable("id") Long serviceId,
+			@PathVariable("serviceProviderId") Long serviceProviderId,
+			@ModelAttribute ServiceProviderDao serviceProvider) {
+		ServiceProviderDao dbProvider = serviceService.findServiceProviderById(serviceProviderId);
+		serviceProvider.setId(serviceProviderId);
+		serviceProvider.setUser(dbProvider.getUser());
+		serviceProvider.setService(dbProvider.getService());
+		return ResponseEntity.ok(serviceService.updateServiceProvider(serviceProvider));
+	}
+
+	public ResponseEntity<String> removeServiceProviders(
+			@PathVariable("id") Long serviceId,
+			@PathVariable("providerId") Long providerId) {
+		serviceService.deleteServiceProvider(providerId);
+		return ResponseEntity.ok("Provider removed!");
 	}
 }

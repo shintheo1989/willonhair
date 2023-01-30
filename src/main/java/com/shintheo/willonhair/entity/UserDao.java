@@ -24,6 +24,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.shintheo.willonhair.base.Gender;
@@ -111,6 +112,10 @@ public class UserDao implements Serializable, UserDetails {
 	)
 	@JsonManagedReference
 	private List<LocationDao> locations;
+	
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
+	private List<ServiceProviderDao> providedServices;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

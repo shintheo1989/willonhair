@@ -2,7 +2,9 @@ package com.shintheo.willonhair.entity;
 
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.context.annotation.Bean;
@@ -163,6 +166,10 @@ public class ServiceDao implements Serializable {
 	@JoinColumn(name = "c_category_id", nullable = false)
 	@JsonBackReference
 	private CategoryDao category;
+	
+	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonBackReference
+	private List<ServiceProviderDao> providers;
 	
 	@Bean
 	public String getImageUrl() {
