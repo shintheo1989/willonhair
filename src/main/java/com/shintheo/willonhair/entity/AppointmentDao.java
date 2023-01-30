@@ -144,6 +144,10 @@ public class AppointmentDao implements Serializable {
 	@OneToMany(mappedBy = "appointment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@JsonManagedReference
 	private List<CustomerBookingDao> bookinks;
+
+	@OneToMany(mappedBy = "appointment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@JsonManagedReference
+	private List<ReviewDao> reviews;
 	
 	public void init() {
 		this.workStatus = WorkStatus.ON_HOLD;
