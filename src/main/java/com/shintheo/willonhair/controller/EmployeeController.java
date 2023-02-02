@@ -106,7 +106,7 @@ public class EmployeeController implements EmployeeApi{
 		 } else {
 			 List<WeekDaysDao> workHours = employeeService.getEmployeeWeekDays(opEmployee.get());
 			 List<DaysOffDao> daysOff = employeeService.getEmployeeDaysOff(opEmployee.get());
-			 return ResponseEntity.ok(Availability.builder().workHours(workHours).daysOff(daysOff).build());
+			 return ResponseEntity.ok(Availability.builder().weekDays(workHours).daysOff(daysOff).build());
 		 }
 	}
 	
