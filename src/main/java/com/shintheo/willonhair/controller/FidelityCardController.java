@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shintheo.willonhair.api.FidelityCardApi;
@@ -26,12 +27,14 @@ public class FidelityCardController implements FidelityCardApi {
 	@Autowired UserService userService;
 	
 	@Override
-	public CardDao incrementFidelity(@PathVariable(name = "id") Long userId) {
+	public CardDao incrementFidelity(
+			@PathVariable(name = "id") Long userId,
+			@RequestParam int value) {
 		UserDao user = userService.getUserById(userId);
 		// Init card in case it is not done yet
 		fidelityCardSrv.initUserCard(user);
 		// Increment points
-		return fidelityCardSrv.incrementUserFidelityPoint(user);		
+		return fidelityCardSrv.incrementUserFidelityPoint(user, value);		
 	}
 	
 	@Override

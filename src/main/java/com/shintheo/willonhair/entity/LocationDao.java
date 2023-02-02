@@ -76,5 +76,8 @@ public class LocationDao implements Serializable {
 	@ManyToMany(mappedBy = "locations")
 	@JsonBackReference
 	private List<UserDao> users;
-
+	
+	@ManyToMany(mappedBy = "locations")
+	@JsonBackReference
+	private List<PeriodDao> periods;
 }

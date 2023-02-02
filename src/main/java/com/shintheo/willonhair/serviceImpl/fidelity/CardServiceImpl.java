@@ -51,17 +51,21 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
-	public CardDao incrementUserFidelityPoint(UserDao user) {
+	public CardDao incrementUserFidelityPoint(UserDao user, int value) {
+		if(value < 0) {
+			value = 0;
+		}
 		// Find card
 		CardDao card = cardRepo.findByUser(user).orElseThrow(() -> new EntityNotFoundException("No card present for the given user"));
 		// Create new point increment and increment this card
 		pointRepo.save(PointIncrementDao.builder()
 				.fidelityCard(card)
+				.value(value)
 				.lastPendingPoint(card.getPendingPoints())
-				.lastPendingPoint(card.getTotalPoints())
+				.lastTotalPoint(card.getTotalPoints())
 				.build());
 		// Increment pending points
-		int newPendingPoints = card.incrementPoints();
+		int newPendingPoints = card.incrementPoints(value);
 		int configMaxPendingPoints = DEFAULT_MAX_PENDING_POINTS;
 		// Take max pending points from settings 
 		Optional<SettingsDao>  opSettings = settingsRepo.findBySectionNameAndSettingName(SettingsDao.SECTION_NAME_FIDELITY_CARD, SettingsDao.SETTING_NAME_POINT_TO_BONUS);
@@ -71,11 +75,11 @@ public class CardServiceImpl implements CardService {
 				configMaxPendingPoints = Integer.parseInt(settings.getSettingValue());				
 			}
 		}
-		if(newPendingPoints >= configMaxPendingPoints) {
-			// Create new bonus and reset pending points
-			bonusRepo.save(BonusIncrementDao.builder().fidelityCard(card).points(newPendingPoints).build());
-			card.addPendingOnTotal(true); // True to increment bonus
-			
+		while(newPendingPoints >= configMaxPendingPoints) {
+			// Create new bonus and update pending points
+			bonusRepo.save(BonusIncrementDao.builder().fidelityCard(card).points(configMaxPendingPoints).build());
+			card.addPendingOnTotal(configMaxPendingPoints, true); // True to increment bonus
+			newPendingPoints = card.getPendingPoints();
 		}
 		return cardRepo.save(card);
 	}
