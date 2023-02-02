@@ -98,7 +98,7 @@ public class UserDao implements Serializable, UserDetails {
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
-	private List<WorkHoursDao> workHours;
+	private List<WeekDaysDao> workHours;
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference

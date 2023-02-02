@@ -3,7 +3,7 @@ package com.shintheo.willonhair.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.shintheo.willonhair.entity.WorkHoursDao;
+import com.shintheo.willonhair.entity.WeekDaysDao;
 import com.shintheo.willonhair.entity.DaysOffDao;
 import com.shintheo.willonhair.entity.UserDao;
 
@@ -19,14 +19,16 @@ public interface EmployeeService {
 	
 	void deleteEmployee(Long employeeId);
 	
-	// Work hours
-	List<WorkHoursDao> getEmployeeWorkHours(UserDao employee);
+	// Week days
+	List<WeekDaysDao> getEmployeeWeekDays(UserDao employee);
 	
-	WorkHoursDao createWorkHours(WorkHoursDao workHours);
+	WeekDaysDao getWeekDaysById(Long weekDaysId);
 	
-	WorkHoursDao updateWorkHours(WorkHoursDao workHours, Long whId);
+	WeekDaysDao createWeekDays(WeekDaysDao weekDays);
 	
-	void deleteWorkHours(Long whId);
+	WeekDaysDao updateWeekDays(WeekDaysDao weekDays, Long wdId);
+	
+	void deleteWeekDays(Long wdId);
 	
 	// Days off
 	List<DaysOffDao> getEmployeeDaysOff(UserDao employee);
