@@ -1,8 +1,13 @@
 package com.shintheo.willonhair.serviceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.shintheo.willonhair.base.Status;
@@ -18,20 +23,15 @@ public class UserServiceImp implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
-
-//	@Autowired
-//	private JavaMailSender mailSender;
+	@Autowired
+	private JavaMailSender mailSender;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserDao submitUser(UserDao user) {
 		log.info("======>UserService: Save new user ({})<======", user);
 		log.info("Info: ici je génère un Id pour pour l'utilisateur venant de willOnHair");
-		long leftLimit = 1L;
-		long rightLimit = 10L;
-		long newId = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
 		return userRepository.save(user);
 	}
 
@@ -64,20 +64,6 @@ public class UserServiceImp implements UserService {
 		return userRepository.save(userUpdate);
 	}
 
-//	private boolean checkIfValidOldPassword(final UserDao user, final String oldPassword) {
-//		return passwordEncoder.matches(oldPassword, user.getPassword());
-//	}
-//
-//	public void updatePassword(String oldPassword, String newPassword, String userEmail) {
-//		UserDao currentUser = this.loadUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-//		if (!this.checkIfValidOldPassword(currentUser, oldPassword)) {
-//			throw new RuntimeException("Please make sure you have entered the correct password ");
-//		} else {
-//			currentUser.setPassword(passwordEncoder.encode(newPassword));
-//			userRepository.save(currentUser);
-//		}
-//	}
-
 	@Override
 	public UserDao deleteUser(UserDao user) {
 		log.info("======>UserService: delete user ({})<======", user);
@@ -85,10 +71,30 @@ public class UserServiceImp implements UserService {
 		return userRepository.save(user);
 	}
 
-	@Override
-	public void updatePassword(String oldPassword, String newPassword, String userEmail) {
-		// TODO Auto-generated method stub
+	private void sendEmail(String toEmail, String subject, String body) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("informatique@willonhair.com");
+		message.setTo(toEmail);
+		message.setText(body);
+		message.setSubject(subject);
 
+		mailSender.send(message);
+		log.info("Mail sended successfully...");
+	}
+
+	@Override
+	public void resetPassword(String emailAddress) {
+		String body = "Utilisez le code suivant pour accéder à votre compte: ";
+		String subject = "Code de Réinitialisation Ivisas-Affaires";
+		Optional<UserDao> user = userRepository.findByEmail(emailAddress);
+		if (!user.isPresent()) {
+			throw new RuntimeException("Cette adresse email est introuvable!!");
+		} else {
+			String code = RandomStringUtils.randomAlphanumeric(8);
+			this.sendEmail(user.get().getEmail(), subject, body + code);
+			user.get().setPassword(passwordEncoder.encode(code));
+			userRepository.save(user.get());
+		}
 	}
 
 }
