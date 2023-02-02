@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.shintheo</groupId>
 	<artifactId>willonhair</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>willonhair</name>
 	<description>Application de gestion des visas</description>
 	<properties>
