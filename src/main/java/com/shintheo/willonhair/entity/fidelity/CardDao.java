@@ -58,19 +58,26 @@ public class CardDao {
 	 * Add one point on pending points
 	 * @return (int) value on pending points after increment
 	 */
-	public int incrementPoints() {
-		this.pendingPoints++;
+	public int incrementPoints(int value) {
+		this.pendingPoints += value;
 		return this.pendingPoints;
 	}
 	
 	/**
 	 * Add pending points on total and reset pending to 0
+	 * @param maxValueToAdd (int) max value to remove from pending and add to total
 	 * @param incrementBonus (boolean) whether to increment bonus or not
 	 * @return (int) value of total points after operation
 	 */
-	public int addPendingOnTotal(boolean incrementBonus) {
-		this.totalPoints += this.pendingPoints;
-		this.pendingPoints = 0;
+	public int addPendingOnTotal(int maxValueToAdd, boolean incrementBonus) {
+		if(this.pendingPoints <= maxValueToAdd) {
+			this.totalPoints += this.pendingPoints;
+			this.pendingPoints = 0;
+		} else {
+			this.totalPoints += maxValueToAdd;
+			this.pendingPoints -= maxValueToAdd;
+		}
+		
 		if(incrementBonus) {
 			this.bonus++;
 		}

@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Availability {
-	public List<WorkHoursDao> workHours;
+	public List<WeekDaysDao> weekDays;
 	public List<DaysOffDao> daysOff;
 }

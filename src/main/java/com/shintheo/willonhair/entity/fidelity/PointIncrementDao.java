@@ -25,33 +25,30 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "fidelity_point_increment")
+@Table(name = "t_fidelity_point_increment")
 public class PointIncrementDao {
 	@Id
-	@Column(name = "id")
+	@Column(name = "c_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "created_at")
+	@Column(name = "c_value", nullable = false)
+	@Builder.Default
+	private int value = 1;
+	
+	@Column(name = "c_created_at")
 	@CreationTimestamp
 	private Timestamp createdAt;
 	
-	@Column(name = "last_pending_point")
+	@Column(name = "c_last_pending_point")
 	private int lastPendingPoint;
 	
-	@Column(name = "last_total_point")
+	@Column(name = "c_last_total_point")
 	private int lastTotalPoint;
 	
 	@ManyToOne
-	@JoinColumn(name = "fidelity_card_id")
+	@JoinColumn(name = "c_fidelity_card_id")
 	@JsonBackReference
 	private CardDao fidelityCard;
-	
-	/*
-	@ManyToOne
-	@JoinColumn(name = "command_id")
-	@JsonBackReference
-	private CommandDao command;
-	*/
 }
 

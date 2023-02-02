@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.shintheo.willonhair.entity.CategoryDao;
 import com.shintheo.willonhair.entity.ServiceDao;
+import com.shintheo.willonhair.entity.ServiceProviderDao;
 import com.shintheo.willonhair.repository.CategoryRepository;
+import com.shintheo.willonhair.repository.ServiceProviderRepository;
 import com.shintheo.willonhair.repository.ServiceRepository;
 import com.shintheo.willonhair.service.ServiceService;
 
@@ -20,6 +22,9 @@ public class ServiceServiceImpl implements ServiceService {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private ServiceProviderRepository providerRepository;
 	
 	// Save operation
 	@Override
@@ -57,5 +62,29 @@ public class ServiceServiceImpl implements ServiceService {
 	@Override
 	public void deleteServiceById(Long serviceId) {
 		serviceRepository.deleteById(serviceId);
+	}
+	
+	@Override
+	public ServiceProviderDao createServiceProvider(ServiceProviderDao provider) {
+		return providerRepository.save(provider);
+	}
+	
+	@Override
+	public ServiceProviderDao updateServiceProvider(ServiceProviderDao provider) {
+		return providerRepository.save(provider);
+	}
+	
+	@Override
+	public List<ServiceProviderDao> fetchServiceProviders(Long serviceId) {
+		ServiceDao service = serviceRepository.findById(serviceId).orElseThrow();
+		return providerRepository.findByService(service);
+	}
+	public ServiceProviderDao findServiceProviderById(Long serviceProviderId) {
+		return providerRepository.findById(serviceProviderId).orElseThrow();
+	}
+	
+	@Override
+	public void deleteServiceProvider(Long serviceProviderId) {
+		providerRepository.deleteById(serviceProviderId);
 	}
 }

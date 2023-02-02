@@ -8,5 +8,5 @@ public interface CardService {
 	
 	CardDao getUserCard(UserDao user);
 	
-	CardDao incrementUserFidelityPoint(UserDao user);
+	CardDao incrementUserFidelityPoint(UserDao user, int value);
 }

@@ -35,7 +35,6 @@ public class SecurityConfiguration {
   .permitAll()
   .mvcMatchers(HttpMethod.PUT, "/api/**") // TODO("Remove this. It's temporally used for testing purpose")
   .permitAll()
-  
   .mvcMatchers(HttpMethod.PUT, "/reset/password/**") // TODO("Remove this. It's temporally used for testing purpose")
   .permitAll()
   .mvcMatchers(HttpMethod.POST, "/api/v1/auth/**")

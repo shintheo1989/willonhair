@@ -6,11 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shintheo.willonhair.entity.WorkHoursDao;
+import com.shintheo.willonhair.entity.WeekDaysDao;
 import com.shintheo.willonhair.base.Type;
 import com.shintheo.willonhair.entity.DaysOffDao;
 import com.shintheo.willonhair.entity.UserDao;
-import com.shintheo.willonhair.repository.WorkHoursRepository;
+import com.shintheo.willonhair.repository.WeekDaysRepository;
 import com.shintheo.willonhair.service.EmployeeService;
 import com.shintheo.willonhair.repository.DaysOffRepository;
 import com.shintheo.willonhair.repository.EmployeeRepository;
@@ -19,7 +19,7 @@ import com.shintheo.willonhair.repository.UserRepository;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
-	private WorkHoursRepository workHoursRepo;
+	private WeekDaysRepository weekDaysRepo;
 	
 	@Autowired
 	private DaysOffRepository daysOffRepo;
@@ -30,8 +30,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	private UserRepository userRepo;
 	
-	public List<WorkHoursDao> getEmployeeWorkHours(UserDao employee) {
-		return workHoursRepo.findEmployeeWorkHours(employee);
+	public List<WeekDaysDao> getEmployeeWeekDays(UserDao employee) {
+		return weekDaysRepo.findEmployeeWeekDays(employee);
 	}
 
 	@Override
@@ -68,25 +68,30 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public List<UserDao> fetchAll() {
 		return employeeRepo.findAll(Type.HAIRDRESSER);
 	}
-	
+
 	@Override
-	public WorkHoursDao createWorkHours(WorkHoursDao workHours) {
-		return workHoursRepo.save(workHours);
+	public WeekDaysDao getWeekDaysById(Long weekDaysId) {
+		return weekDaysRepo.findById(weekDaysId).orElseThrow();
 	}
 	
 	@Override
-	public WorkHoursDao updateWorkHours(WorkHoursDao workHours, Long whId) {
-		WorkHoursDao dbWH = workHoursRepo.findById(whId).get();
-		dbWH.setName(workHours.getName());
-		dbWH.setDay(workHours.getDay());
-		dbWH.setStart(workHours.getStart());
-		dbWH.setEnd(workHours.getEnd());
-		return workHoursRepo.save(dbWH);
+	public WeekDaysDao createWeekDays(WeekDaysDao weekDays) {
+		return weekDaysRepo.save(weekDays);
 	}
 	
 	@Override
-	public void deleteWorkHours(Long woID) {
-		workHoursRepo.deleteById(woID);
+	public WeekDaysDao updateWeekDays(WeekDaysDao weekDays, Long whId) {
+		WeekDaysDao dbWH = weekDaysRepo.findById(whId).get();
+		dbWH.setName(weekDays.getName());
+		dbWH.setDay(weekDays.getDay());
+		dbWH.setStart(weekDays.getStart());
+		dbWH.setEnd(weekDays.getEnd());
+		return weekDaysRepo.save(dbWH);
+	}
+	
+	@Override
+	public void deleteWeekDays(Long woID) {
+		weekDaysRepo.deleteById(woID);
 	}
 	
 	@Override
