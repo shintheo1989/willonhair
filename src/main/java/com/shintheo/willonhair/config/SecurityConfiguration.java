@@ -16,31 +16,42 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfiguration {
-	
-	private final JwtAuthenticationFilter jwtAuthFilter;
-	private final AuthenticationProvider authenticationProvider;
+ 
+ private final JwtAuthenticationFilter jwtAuthFilter;
+ private final AuthenticationProvider authenticationProvider;
 
-	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+ @Bean
+ SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
-		http
-		.csrf()
-		.disable()
-		.authorizeHttpRequests()
-		.mvcMatchers(HttpMethod.POST, "/api/v1/auth/**")
-		.permitAll()
-		.mvcMatchers(HttpMethod.GET, "/swagger-ui/**", "api-docs/**")
-		.permitAll()
-		.anyRequest()
-		.authenticated()
-		.and()
-		.sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and()
-		.authenticationProvider(authenticationProvider)
-		.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-		
-		
-		return http.build();
-	}
+  http
+  .csrf()
+  .disable()
+  .authorizeHttpRequests()
+  .mvcMatchers(HttpMethod.POST, "/api/**") // TODO("Remove this. It's temporally used for testing purpose")
+  .permitAll()
+  .mvcMatchers(HttpMethod.GET, "/api/**") // TODO("Remove this. It's temporally used for testing purpose")
+  .permitAll()
+  .mvcMatchers(HttpMethod.DELETE, "/api/**") // TODO("Remove this. It's temporally used for testing purpose")
+  .permitAll()
+  .mvcMatchers(HttpMethod.PUT, "/api/**") // TODO("Remove this. It's temporally used for testing purpose")
+  .permitAll()
+  
+  .mvcMatchers(HttpMethod.PUT, "/reset/password/**") // TODO("Remove this. It's temporally used for testing purpose")
+  .permitAll()
+  .mvcMatchers(HttpMethod.POST, "/api/v1/auth/**")
+  .permitAll()
+  .mvcMatchers(HttpMethod.GET, "/swagger-ui/**", "api-docs/**")
+  .permitAll()
+  .anyRequest()
+  .authenticated()
+  .and()
+  .sessionManagement()
+  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+  .and()
+  .authenticationProvider(authenticationProvider)
+  .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+  
+  
+  return http.build();
+ }
 }
