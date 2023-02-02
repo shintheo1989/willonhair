@@ -85,7 +85,7 @@ public class UserServiceImp implements UserService {
 	@Override
 	public void resetPassword(String emailAddress) {
 		String body = "Utilisez le code suivant pour accéder à votre compte: ";
-		String subject = "Code de Réinitialisation Ivisas-Affaires";
+		String subject = "Code de Réinitialisation WillOnHair";
 		Optional<UserDao> user = userRepository.findByEmail(emailAddress);
 		if (!user.isPresent()) {
 			throw new RuntimeException("Cette adresse email est introuvable!!");
