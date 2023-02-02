@@ -10,6 +10,8 @@ public interface UserService {
 	UserDao getUserById(long id);
 
 	List<UserDao> getAllUsers();
+	
+	void resetPassword(String emailAddress);
 
 	UserDao getUserByEmail(String email);
 
@@ -17,5 +19,4 @@ public interface UserService {
 
 	UserDao deleteUser(UserDao user);
 
-	void updatePassword(String oldPassword, String newPassword, String userEmail);
 }
