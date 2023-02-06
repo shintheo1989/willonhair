@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shintheo.willonhair.base.Type;
 import com.shintheo.willonhair.entity.UserDao;
 import com.shintheo.willonhair.repository.ClientRepository;
 import com.shintheo.willonhair.service.ClientService;
@@ -39,6 +40,6 @@ public class ClientServiceImpl implements ClientService{
 	
 	@Override
 	public List<UserDao> fetchAll() {
-		return ClientRepo.findAll();
+		return ClientRepo.findAll(Type.CUSTOMER);
 	}
 }
