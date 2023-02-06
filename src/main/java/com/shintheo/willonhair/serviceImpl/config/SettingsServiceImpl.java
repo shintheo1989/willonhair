@@ -1,5 +1,6 @@
 package com.shintheo.willonhair.serviceImpl.config;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class SettingsServiceImpl implements SettingsService{
 			// Create new settings
 			return repo.save(data); 
 		}
+	}
+
+	@Override
+	public List<SettingsDao> fetchAll() {
+		return repo.findAll();
 	}
 
 }

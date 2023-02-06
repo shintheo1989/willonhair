@@ -1,6 +1,9 @@
 package com.shintheo.willonhair.controller.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +22,14 @@ public class SettingsController implements SettingsApi{
 	SettingsService service;
 
 	@Override
-	public SettingsDao updateFidelityPointToBonus(@RequestParam(name = "value") String value) {
+	public ResponseEntity<SettingsDao> updateFidelityPointToBonus(@RequestParam(name = "value") String value) {
 		SettingsDao settings = SettingsDao.buildPointsToBonusSettings();
 		settings.setSettingValue(value);
-		return service.updateSettings(settings);
+		return ResponseEntity.ok(service.updateSettings(settings));
+	}
+
+	@Override
+	public ResponseEntity<List<SettingsDao>> getSettings() {
+		return ResponseEntity.ok(service.fetchAll());
 	}
 }
