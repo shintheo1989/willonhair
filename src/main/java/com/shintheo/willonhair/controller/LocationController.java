@@ -55,6 +55,10 @@ public class LocationController implements LocationApi {
 				log.error(e.getMessage());
 			}
 		}
+		// Handle amelia ID
+		if(location.getId() != null) {
+			location.transferIdToAmeliaId();
+		}
 		return ResponseEntity.ok(service.createLocation(location));
 	}
 

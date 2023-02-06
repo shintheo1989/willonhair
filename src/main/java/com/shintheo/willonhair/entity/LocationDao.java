@@ -73,6 +73,9 @@ public class LocationDao implements Serializable {
 	@Column(name = "c_translations", nullable = true, length = 767)
 	private String translations;
 	
+	@Column(name = "c_amelia_id", nullable = true)
+	private Long ameliaId;
+	
 	@ManyToMany(mappedBy = "locations")
 	@JsonBackReference
 	private List<UserDao> users;
@@ -80,4 +83,9 @@ public class LocationDao implements Serializable {
 	@ManyToMany(mappedBy = "locations")
 	@JsonBackReference
 	private List<PeriodDao> periods;
+
+	public void transferIdToAmeliaId() {
+		this.ameliaId = this.id;
+		this.id = null;
+	}
 }
